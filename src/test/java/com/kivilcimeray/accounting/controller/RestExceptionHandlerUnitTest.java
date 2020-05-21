@@ -11,8 +11,11 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -81,6 +84,43 @@ public class RestExceptionHandlerUnitTest {
 
         assertNotNull(responseEntity);
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        ApiError body = (ApiError) responseEntity.getBody();
+
+        assertNotNull(body);
+        assertEquals(defaultMessage, body.getMessage());
+    }
+
+    @Test
+    public void shouldHandleMethodArgumentNotValidAndReturnResponse() {
+        MethodArgumentNotValidException ex = Mockito.mock(MethodArgumentNotValidException.class);
+        String defaultMessage = "Default message";
+        FieldError fielderror = new FieldError("objectName", "field", defaultMessage);
+        BindingResult bindingResult = Mockito.mock(BindingResult.class);
+
+        when(bindingResult.getFieldError()).thenReturn(fielderror);
+        when(ex.getBindingResult()).thenReturn(bindingResult);
+
+        ResponseEntity<Object> responseEntity = handler.handleMethodArgumentNotValid(ex, null, null, null);
+
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
+        ApiError body = (ApiError) responseEntity.getBody();
+
+        assertNotNull(body);
+        assertEquals(defaultMessage, body.getMessage());
+    }
+
+    @Test
+    public void shouldHandleHttpMessageNotReadableAndReturnResponse() {
+        HttpMessageNotReadableException ex = Mockito.mock(HttpMessageNotReadableException.class);
+        String defaultMessage = "Default message";
+
+        when(ex.getLocalizedMessage()).thenReturn(defaultMessage);
+
+        ResponseEntity<Object> responseEntity = handler.handleHttpMessageNotReadable(ex, null, null, null);
+
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
         ApiError body = (ApiError) responseEntity.getBody();
 
         assertNotNull(body);
