@@ -13,7 +13,9 @@ It has unit tests & integration for all possible cases.
 # Endpoints
 
 You need to have right authorization for requests.
+
 USER Roled Api Account : USER / USER
+
 ADMIN Roled Api Account : ADMIN / ADMIN
 
 For Withdraw / Credit endpoints, you must have ADMIN role.
