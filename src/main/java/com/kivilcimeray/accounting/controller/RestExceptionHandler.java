@@ -9,7 +9,9 @@ import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -60,6 +62,26 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         ApiError apiError = ApiError.builder()
                 .status(HttpStatus.BAD_REQUEST)
                 .message(ex.getFieldError().getDefaultMessage())
+                .build();
+
+        return buildResponseEntity(apiError);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        ApiError apiError = ApiError.builder()
+                .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .message(ex.getBindingResult().getFieldError().getDefaultMessage())
+                .build();
+
+        return buildResponseEntity(apiError);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        ApiError apiError = ApiError.builder()
+                .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .message(ex.getLocalizedMessage())
                 .build();
 
         return buildResponseEntity(apiError);

@@ -102,7 +102,9 @@ public class AccountControllerIntegrationTest {
                 .content(requestJson)
                 .headers(header))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(jsonPath("$.status", is("UNPROCESSABLE_ENTITY")))
+                .andExpect(jsonPath("$.message", is("The amount should be greater than zero.")))
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -117,13 +119,14 @@ public class AccountControllerIntegrationTest {
         HttpHeaders header = new HttpHeaders();
         header.add(HttpHeaders.AUTHORIZATION, "Basic YWRtaW46YWRtaW4=");
 
-
         mvc.perform(post("/credit")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson)
                 .headers(header))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(jsonPath("$.status", is("UNPROCESSABLE_ENTITY")))
+                .andExpect(jsonPath("$.message", is("The transactionCode must be specified.")))
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -143,7 +146,9 @@ public class AccountControllerIntegrationTest {
                 .content(requestJson)
                 .headers(header))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(jsonPath("$.status", is("UNPROCESSABLE_ENTITY")))
+                .andExpect(jsonPath("$.message", is("The playerID should be specified.")))
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -188,7 +193,9 @@ public class AccountControllerIntegrationTest {
                 .content(requestJson)
                 .headers(header))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(jsonPath("$.status", is("UNPROCESSABLE_ENTITY")))
+                .andExpect(jsonPath("$.message", is("The amount should be greater than zero.")))
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -203,13 +210,14 @@ public class AccountControllerIntegrationTest {
         HttpHeaders header = new HttpHeaders();
         header.add(HttpHeaders.AUTHORIZATION, "Basic YWRtaW46YWRtaW4=");
 
-
         mvc.perform(post("/withdraw")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson)
                 .headers(header))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(jsonPath("$.status", is("UNPROCESSABLE_ENTITY")))
+                .andExpect(jsonPath("$.message", is("The transactionCode must be specified.")))
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -229,7 +237,9 @@ public class AccountControllerIntegrationTest {
                 .content(requestJson)
                 .headers(header))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(jsonPath("$.status", is("UNPROCESSABLE_ENTITY")))
+                .andExpect(jsonPath("$.message", is("The playerID should be specified.")))
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -331,6 +341,27 @@ public class AccountControllerIntegrationTest {
                 .andExpect(status().isNotAcceptable())
                 .andExpect(jsonPath("$.status", is("NOT_ACCEPTABLE")))
                 .andExpect(jsonPath("$.message", is("Player Balance not enough for Withdrawal. Current balance : 100.00")));
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenApiUserRoleIsNotAdminOnCredit() throws Exception {
+        TransactionDTO sampleDTO = TransactionDTO.builder()
+                .amount($(1))
+                .playerID(123L)
+                .transactionCode(UUID.randomUUID())
+                .build();
+
+        String requestJson = ow.writeValueAsString(sampleDTO);
+
+        HttpHeaders header = new HttpHeaders();
+        header.add(HttpHeaders.AUTHORIZATION, "Basic dXNlcjp1c2Vy"); //user auth
+
+        mvc.perform(post("/credit")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .headers(header))
+                .andDo(print())
+                .andExpect(status().isForbidden());
     }
 
     private void saveSamplePlayer(Player player) {

@@ -35,15 +35,15 @@ public class AccountController {
         return transactionService.getAllTransactionRecordsFor(id);
     }
 
-    @PostMapping("/credit")
-    public PlayerDTO credit(@RequestBody @Valid TransactionDTO transactionDTO) {
+    @PostMapping(value = "/credit")
+    public PlayerDTO credit(@Valid @RequestBody TransactionDTO transactionDTO) {
         CreditTransaction creditTransaction = transactionMapper.transactionDTOToCreditTransaction(transactionDTO);
 
         return playerService.updatePlayerBalance(creditTransaction);
     }
 
     @PostMapping("/withdraw")
-    public PlayerDTO withdraw(@RequestBody @Valid TransactionDTO transactionDTO) {
+    public PlayerDTO withdraw(@Valid @RequestBody TransactionDTO transactionDTO) {
         WithdrawTransaction withdrawTransaction = transactionMapper.transactionDTOToWithdrawTransaction(transactionDTO);
 
         return playerService.updatePlayerBalance(withdrawTransaction);

@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UniqueCode {
-    String message() default "Invalid uniqueCode";
+    String message() default "Transaction Code is not unique.";
 
     Class<?>[] groups() default {};
 
