@@ -8,12 +8,13 @@ import com.kivilcimeray.accounting.model.api.User;
 import com.kivilcimeray.accounting.repository.PlayerRepository;
 import com.kivilcimeray.accounting.repository.TransactionRepository;
 import com.kivilcimeray.accounting.repository.UserRepository;
-import com.sun.tools.javac.util.List;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static com.kivilcimeray.accounting.util.AccountingUtils.$;
@@ -52,7 +53,7 @@ public class Bootstrapper implements SmartInitializingSingleton {
 
         Player samplePlayer = new Player(5L, $(100));
 
-        List<PaymentTransaction> transactionHistory = List.of(
+        List<PaymentTransaction> transactionHistory = Arrays.asList(
                 new CreditTransaction($(200), UUID.randomUUID(), samplePlayer),
                 new WithdrawTransaction($(100), UUID.randomUUID(), samplePlayer)
         );
