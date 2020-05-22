@@ -73,7 +73,7 @@ public class AccountControllerUnitTest {
 
         List<TransactionDTO> sampleTransactionDTOList = Collections.singletonList(sampleTransactionDTO);
 
-        when(transactionService.getAllTransactionRecordsFor(samplePLayerID)).thenReturn(sampleTransactionDTOList);
+        when(transactionService.getAllTransactionsOfPlayer(samplePLayerID)).thenReturn(sampleTransactionDTOList);
 
         List<TransactionDTO> transactionDTOList = controller.collectHistoryLog(samplePLayerID);
 

@@ -24,7 +24,7 @@ public class TransactionService {
     @Autowired
     private TransactionMapper transactionMapper;
 
-    public List<TransactionDTO> getAllTransactionRecordsFor(Long playerId) {
+    public List<TransactionDTO> getAllTransactionsOfPlayer(Long playerId) {
         boolean playerExist = playerService.playerExistById(playerId);
         if (!playerExist) { //guard.
             log.info("getAllTransactionRecordsFor method called, player not found. player id : {}", playerId);

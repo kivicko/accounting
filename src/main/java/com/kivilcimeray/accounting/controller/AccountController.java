@@ -32,7 +32,7 @@ public class AccountController {
 
     @GetMapping("/log/{id}")
     public List<TransactionDTO> collectHistoryLog(@PathVariable Long id) {
-        return transactionService.getAllTransactionRecordsFor(id);
+        return transactionService.getAllTransactionsOfPlayer(id);
     }
 
     @PostMapping(value = "/credit")

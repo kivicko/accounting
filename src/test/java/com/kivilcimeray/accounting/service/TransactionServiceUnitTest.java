@@ -42,7 +42,7 @@ public class TransactionServiceUnitTest {
         when(playerService.playerExistById(nonExistingPlayerID)).thenReturn(false);
 
         try {
-            service.getAllTransactionRecordsFor(nonExistingPlayerID);
+            service.getAllTransactionsOfPlayer(nonExistingPlayerID);
             fail();
         } catch (PlayerNotFoundException ex) {
             verify(playerService).playerExistById(nonExistingPlayerID);
@@ -67,7 +67,7 @@ public class TransactionServiceUnitTest {
         when(transactionRepository.findAllByPlayerId(samplePlayerID)).thenReturn(unnecessaryList);
         when(transactionMapper.paymentTransactionsToTransactionDTOList(unnecessaryList)).thenReturn(sampleTransactionDTOList);
 
-        List<TransactionDTO> transactionDTOList = service.getAllTransactionRecordsFor(samplePlayerID);
+        List<TransactionDTO> transactionDTOList = service.getAllTransactionsOfPlayer(samplePlayerID);
 
         assertNotNull(transactionDTOList);
         assertEquals(1, transactionDTOList.size());
