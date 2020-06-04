@@ -1,5 +1,4 @@
 # Accounting
-This repositroy is created for LeoVegas. It will stay as private since leovegas will send this task to many developers.
 
 Used Spring Boot v2.2.6 / Created project with Spring Initializr
 
