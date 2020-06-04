@@ -2,6 +2,8 @@
 
 Used Spring Boot v2.2.6 / Created project with Spring Initializr
 
+This project is a showcase of not only hibernate optimistic lock mechanism, but also unit & integration test usage
+
 # About Project
 This project is basically player withdraw / credit operations by api at its minimum.
 
